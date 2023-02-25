@@ -1,23 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import { HomePage } from './pages/rootPage';
 
 function App() {
   return (
     <div className="App">
+      <a
+        href="http://webservice.recruit.co.jp/">
+        <img
+          src="http://webservice.recruit.co.jp/banner/hotpepper-s.gif"
+          alt="ホットペッパー Webサービス"
+          width="135" height="17" border="0" title="ホットペッパー Webサービス"
+        />
+      </a>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Router>
+          <Routes>
+            <Route exact path='/' element={<HomePage />}/>
+          </Routes>
+        </Router>
       </header>
+      <footer>version</footer>
     </div>
   );
 }

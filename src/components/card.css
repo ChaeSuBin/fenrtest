@@ -1,0 +1,20 @@
+.ItemList {
+    margin: 12px;
+    border-radius: 4px;
+    background-color: #f7f7f7;
+    padding: 4px 12px;
+    color:#333;
+  }
+  
+  .ItemList-title {
+    margin: 0 8px 4px;
+    border-bottom: 1px solid rgb(59, 59, 59);
+    text-align: left;
+    color:#0057e5;
+  }
+  
+  .ItemList-description {
+    word-wrap: break-word;
+    text-align: left;
+    color:#4c4c4c;
+  }
