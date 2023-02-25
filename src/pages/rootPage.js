@@ -4,15 +4,27 @@ import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
 
 export const HomePage = () => {
-  const [mapIns, setMapIns] = useState(null);
+  const [mapIns, getMapIns] = useState(null);
   const [mapCenter, setCenter] = useState({positionX: null,positionY: null});
   const [restaurantList, setList] = useState([]);
+  const [storeXY, setPosition] = useState([{name: "", coordinates: [0,0]}]);
   const [pageNum, setPage] = useState(0);
   const [pFlag, setPageFlag] = useState(false);
 
   const getStoreInfo = async(_pageNum, _lat, _lng) => {
+    let iterINT = 0;
+    let storeLocateBatch = [];
+    const searchCount = 10;
     const storeInfo = await getStoreList(_pageNum, _lat, _lng);
-    console.log(storeInfo.results.shop[0].lat);
+    while(searchCount > iterINT){
+      let storeLocation = {
+        name: storeInfo.results.shop[iterINT].name,
+        coordinates: [storeInfo.results.shop[iterINT].lat, storeInfo.results.shop[iterINT].lng]
+      }
+      storeLocateBatch.push(storeLocation);
+      ++iterINT;
+    }
+    setPosition(storeLocateBatch);
     setList(storeInfo.results.shop);
   }
 
@@ -27,7 +39,7 @@ export const HomePage = () => {
     }
   }
   
-  const testButton = () => {
+  const searchButton = () => {
     //console.log(mapIns.getCenter());//getBounds
     const coordinateX = mapIns.getCenter().lat;
     const coordinateY = mapIns.getCenter().lng;
@@ -35,11 +47,15 @@ export const HomePage = () => {
     getStoreInfo(pageNum, coordinateX, coordinateY);
     setPageFlag(true);
   }
+  const setLatlngTuple = () => {
+    let searchedObj;
+    
+  }
 
   return(
     <section className="Align-center">
-      <MapView setBound={setMapIns}/>
-      <button onClick={testButton}>地図から探す</button><br/>
+      <MapView setMapIns={getMapIns} storeLocations={storeXY} />
+      <button onClick={searchButton}>地図から探す</button><br/>
       {restaurantList.map((searchItems, index) => (
         <ItemListCpnt
           key={index}

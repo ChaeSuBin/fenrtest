@@ -10,5 +10,5 @@ async function request(path, options = {}) {
 // }
 export async function getStoreList(_pageNum, _lat, _lng){
     // console.log(_pageNum, _lat, _lng);
-    return request(`&lat=${_lat}&lng=${_lng}&range=5&order=4&start=${_pageNum}`);
+    return request(`&lat=${_lat}&lng=${_lng}&range=1&order=1&start=${_pageNum}`);
 }

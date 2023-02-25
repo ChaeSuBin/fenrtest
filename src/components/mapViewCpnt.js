@@ -1,7 +1,7 @@
 import React, { useState }from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
-export const MapView = ({ setBound }) => {
+export const MapView = ({ setMapIns, storeLocations }) => {
   const [position, setXY] = useState([35.689, 139.692]);
   const zoom = 17;
 
@@ -11,23 +11,24 @@ export const MapView = ({ setBound }) => {
       center={position}
       zoom={zoom}
       scrollWheelZoom={false}
-      ref={setBound}
+      ref={setMapIns}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {/* <GetMapBounds setBound={setBound}/> */}
-      <Marker position={position}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+			{storeLocations.map((marker, idx) => (
+				<Marker key={idx} position={marker.coordinates}>
+					<Popup>
+						{marker.name} <br /> test
+					</Popup>
+				</Marker>
+			))}
     </MapContainer>
   </>
   )
 }
-const GetMapBounds = ({setBound}) => {
+const SetMarker = ({setBound}) => {
   const mapInstance = useMap();
   const mapBound = mapInstance.getBounds();
   setBound(mapBound);
