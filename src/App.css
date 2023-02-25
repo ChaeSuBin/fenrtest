@@ -32,6 +32,9 @@
     bottom:0;
     background-color: rgb(211, 104, 104);
   }
+  .App-header {
+    padding-bottom: 10%
+  }
 }
 @media (min-width: 701px) {
   footer {
@@ -52,6 +55,11 @@
   }
 }
 
-.PageSelector {
-  text-align-last: center;
+.Align-center {
+  text-align: center;
+}
+.leaflet-container {
+  width: auto;
+  height: 400px;
+  margin: 10px;
 }

@@ -1,20 +1,32 @@
 .ItemList {
-    margin: 12px;
-    border-radius: 4px;
-    background-color: #f7f7f7;
-    padding: 4px 12px;
-    color:#333;
-  }
+  border-radius: 4px;
+  text-align: left;
+  background-color: #f7f7f7;
+  padding: 4px 12px;
+  color:#333;
+}
   
   .ItemList-title {
     margin: 0 8px 4px;
     border-bottom: 1px solid rgb(59, 59, 59);
-    text-align: left;
+    /* text-align-last: left; */
     color:#0057e5;
   }
   
   .ItemList-description {
     word-wrap: break-word;
-    text-align: left;
+    /* text-align-last: left; */
     color:#4c4c4c;
   }
+
+@media (max-width: 700px){
+  .ItemList {
+    margin: 12px;
+  }
+}
+@media (min-width: 701px) {
+  .ItemList {
+    margin: 12px auto;
+    width: 80%;
+  }
+}
