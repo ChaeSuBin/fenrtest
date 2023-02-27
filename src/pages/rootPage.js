@@ -11,7 +11,7 @@ export const HomePage = () => {
   const [pageNum, setPage] = useState(0);
   const [pFlag, setPageFlag] = useState(false);
 
-  const getStoreInfo = async(_pageNum, _lat, _lng) => {
+  const getStoreInfo = async(_pageNum, _lat, _lng, _zoom) => {
     let iterINT = 0;
     let storeLocateBatch = [];
     const searchCount = 10;
@@ -27,6 +27,18 @@ export const HomePage = () => {
     setPosition(storeLocateBatch);
     setList(storeInfo.results.shop);
   }
+  const getListOnRange = (_zoomLevel) => {
+    switch(_zoomLevel){
+      case 17:
+        console.log('17');
+        break;
+      case 18:
+        console.log('18');
+        break;
+      default:
+        console.log('deft');
+    }
+  }
 
   const nextPage = (_page) => {
     setPage(pageNum+10);
@@ -40,20 +52,21 @@ export const HomePage = () => {
   }
   
   const searchButton = () => {
-    //console.log(mapIns.getCenter());//getBounds
+    //console.log(mapIns.getBounds());
+    const zoomLevel = mapIns.getZoom();
     const coordinateX = mapIns.getCenter().lat;
     const coordinateY = mapIns.getCenter().lng;
     setCenter({coordinateX, coordinateY});
-    getStoreInfo(pageNum, coordinateX, coordinateY);
+    getStoreInfo(pageNum, coordinateX, coordinateY, zoomLevel);
     setPageFlag(true);
   }
-  const setLatlngTuple = () => {
-    let searchedObj;
-    
+  const testbtn = () => {
+    getListOnRange(mapIns.getZoom());
   }
 
   return(
     <section className="Align-center">
+      <button onClick={testbtn}>test</button>
       <MapView setMapIns={getMapIns} storeLocations={storeXY} />
       <button onClick={searchButton}>地図から探す</button><br/>
       {restaurantList.map((searchItems, index) => (
