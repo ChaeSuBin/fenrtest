@@ -10,7 +10,7 @@ export const MapView = ({ setMapIns, storeLocations }) => {
     <MapContainer 
       center={position}
       zoom={zoom}
-			minZoom={15}
+			minZoom={12}
       scrollWheelZoom={false}
       ref={setMapIns}
     >

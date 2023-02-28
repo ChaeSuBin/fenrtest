@@ -6,62 +6,104 @@ import { MapView } from "../components/mapViewCpnt";
 export const HomePage = () => {
   const [mapIns, getMapIns] = useState(null);
   const [mapCenter, setCenter] = useState({positionX: null,positionY: null});
-  const [restaurantList, setList] = useState([]);
+  const [viewList, setViewList] = useState([]);
   const [storeXY, setPosition] = useState([{name: "", coordinates: [0,0]}]);
-  const [pageNum, setPage] = useState(0);
+  const [pageNum, setPage] = useState(1);
+  const [wholePage, setWpage] = useState(1);
   const [pFlag, setPageFlag] = useState(false);
 
-  const getStoreInfo = async(_pageNum, _lat, _lng, _zoom) => {
-    let iterINT = 0;
-    let storeLocateBatch = [];
-    const searchCount = 10;
-    const storeInfo = await getStoreList(_pageNum, _lat, _lng);
-    while(searchCount > iterINT){
-      let storeLocation = {
-        name: storeInfo.results.shop[iterINT].name,
-        coordinates: [storeInfo.results.shop[iterINT].lat, storeInfo.results.shop[iterINT].lng]
-      }
-      storeLocateBatch.push(storeLocation);
-      ++iterINT;
-    }
-    setPosition(storeLocateBatch);
-    setList(storeInfo.results.shop);
-  }
-  const getListOnRange = (_zoomLevel) => {
-    switch(_zoomLevel){
-      case 17:
-        console.log('17');
-        break;
-      case 18:
-        console.log('18');
-        break;
-      default:
-        console.log('deft');
-    }
-  }
-
   const nextPage = (_page) => {
-    setPage(pageNum+10);
-    getStoreInfo(pageNum+10, mapCenter.coordinateX, mapCenter.coordinateY);
+    
   }
   const prevPage = (_page) => {
     if(_page > 1){
-      setPage(pageNum-10);
-      getStoreInfo(pageNum-10, mapCenter.coordinateX, mapCenter.coordinateY);
+      
     }
   }
+
+  //get store info using server api
+  const getStoreInfoP = async(_pageNum, _searchCount, _lat, _lng) => {
+    const searchFrom = ((_pageNum-1)*10)+1;
+    return new Promise(resolve => {
+      getStoreList(searchFrom, _searchCount, _lat, _lng).then(storeInfoFromDB => {
+        resolve(storeInfoFromDB.results.shop)
+      })
+    })
+  }
+
+  //create tuple of store location from store info
+  const setStoreLocation = (_shopList, _searchCount) => {
+    console.log(_shopList.length);
+    let iterINT = 0;
+    let storeLocateBatch = [];
+    
+    try{
+      while(_searchCount > iterINT){
+        let storeLocation = {
+          name: _shopList[iterINT].name,
+          coordinates: [_shopList[iterINT].lat, _shopList[iterINT].lng]
+        }
+        storeLocateBatch.push(storeLocation);
+        ++iterINT;
+      }
+    }
+    catch(err){
+      console.log('not allowed Reference');
+    }
+    setPosition(storeLocateBatch);
+    setWpage(Math.ceil(_shopList.length / 10));
+  }
   
-  const searchButton = () => {
-    //console.log(mapIns.getBounds());
+  //create 10 tuple of store list for Render
+  const setResultView = (_shopList, _pageNum) => {
+    console.log(_pageNum);
+    let iterINT = (_pageNum - 1) * 10;
+    let storeViewList = [];
+
+    try{
+      while(iterINT < _pageNum * 10){
+        let searchItem = {
+          name: _shopList[iterINT].name,
+          desc: _shopList[iterINT].catch,
+          addr: _shopList[iterINT].address,
+          photo: _shopList[iterINT].photo.pc.m,
+        }
+        storeViewList.push(searchItem);
+        ++iterINT;
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+    setViewList(storeViewList);
+  }
+
+  //set search Range base on zoom level on map
+  const setSearchRange = (_zoom) => {
+    switch(_zoom){
+			case 16:
+				return 100;
+			case 17:
+				return 30;
+			case 18:
+				return 10;
+			default:
+				return 100;
+		}
+  }
+
+  const searchButton = async() => {
     const zoomLevel = mapIns.getZoom();
     const coordinateX = mapIns.getCenter().lat;
     const coordinateY = mapIns.getCenter().lng;
-    setCenter({coordinateX, coordinateY});
-    getStoreInfo(pageNum, coordinateX, coordinateY, zoomLevel);
+    const numberOfResult = setSearchRange(zoomLevel);
+    const loadedShopList = await getStoreInfoP(pageNum, numberOfResult, coordinateX, coordinateY);
+    setStoreLocation(loadedShopList, numberOfResult);
+    setResultView(loadedShopList, pageNum);
     setPageFlag(true);
   }
   const testbtn = () => {
-    getListOnRange(mapIns.getZoom());
+    // setResultView();
   }
 
   return(
@@ -69,18 +111,18 @@ export const HomePage = () => {
       <button onClick={testbtn}>test</button>
       <MapView setMapIns={getMapIns} storeLocations={storeXY} />
       <button onClick={searchButton}>地図から探す</button><br/>
-      {restaurantList.map((searchItems, index) => (
+      {viewList.map((searchItems, index) => (
         <ItemListCpnt
           key={index}
           name={searchItems.name}
-          desc={searchItems.catch}
-          addr={searchItems.address}
-          photo={searchItems.photo.pc.m}
+          desc={searchItems.desc}
+          addr={searchItems.addr}
+          photo={searchItems.photo}
         />
       ))}
       {pFlag ? (<>
         <a onClick={()=>prevPage(pageNum)} style={{cursor: "pointer"}} >prev ←</a>
-        {' '+(pageNum/10 +1)+' '}
+        {' '+(pageNum)+' / ' + (wholePage) + ' '}
         <a onClick={()=>nextPage(pageNum)} style={{cursor: "pointer"}} >→ next</a>
       </>):null}
     </section>

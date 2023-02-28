@@ -8,7 +8,6 @@ async function request(path, options = {}) {
 // export async function getStoreInfo(_pageNum, _largeArea){
 //     return request(`&large_area=Z011&start=${_pageNum}`, {mode: 'cors', credentials: 'include'});
 // }
-export async function getStoreList(_pageNum, _lat, _lng){
-    // console.log(_pageNum, _lat, _lng);
-    return request(`&lat=${_lat}&lng=${_lng}&range=1&order=1&start=${_pageNum}`);
+export async function getStoreList(_searchFrom, _searchCount, _lat, _lng){
+    return request(`&lat=${_lat}&lng=${_lng}&range=5&order=1&start=${_searchFrom}&count=${_searchCount}`);
 }
