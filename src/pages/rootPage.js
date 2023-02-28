@@ -4,22 +4,42 @@ import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
 
 export const HomePage = () => {
+  const [zoomap, getZoomLevel] = useState(17);
   const [mapIns, getMapIns] = useState(null);
+  const [rangeIndicatior, setRangeIndi] = useState(null);
   const [mapCenter, setCenter] = useState({positionX: null,positionY: null});
+  const [searchedItems, setItems] = useState([]);
   const [viewList, setViewList] = useState([]);
   const [storeXY, setPosition] = useState([{name: "", coordinates: [0,0]}]);
   const [pageNum, setPage] = useState(1);
   const [wholePage, setWpage] = useState(1);
   const [pFlag, setPageFlag] = useState(false);
+  const [noResult, setNo] = useState(false);
 
-  const nextPage = (_page) => {
-    
-  }
-  const prevPage = (_page) => {
-    if(_page > 1){
-      
+  //auto detect a mapScailing and display searchRange based od zoom level
+  useEffect(() => {
+    let searchRange;
+    try{
+      searchRange = setSearchRange(zoomap);
     }
-  }
+    catch(err){
+      searchRange = 20;
+    }
+
+    switch(searchRange){
+      case 10:
+        setRangeIndi('検索半径：回り');
+        break;
+      case 20:
+        setRangeIndi('検索半径：通り');
+        break;
+      case 50:
+        setRangeIndi('検索半径：町');
+        break;
+      default:
+        setRangeIndi('検索半径：区');
+    }
+  },[zoomap])
 
   //get store info using server api
   const getStoreInfoP = async(_pageNum, _searchCount, _lat, _lng) => {
@@ -78,13 +98,30 @@ export const HomePage = () => {
     setViewList(storeViewList);
   }
 
+  const nextPage = (_page) => {
+    if(_page < wholePage){
+      const pageNum = _page+1;
+      setPage(pageNum);
+      setResultView(searchedItems, pageNum);
+    }
+  }
+  const prevPage = (_page) => {
+    if(_page > 1){
+      const pageNum = _page-1;
+      setPage(pageNum);
+      setResultView(searchedItems, pageNum);
+    }
+  }
+
   //set search Range base on zoom level on map
   const setSearchRange = (_zoom) => {
     switch(_zoom){
+      case 15:
+        return 100;
 			case 16:
-				return 100;
+				return 50;
 			case 17:
-				return 30;
+				return 20;
 			case 18:
 				return 10;
 			default:
@@ -92,15 +129,27 @@ export const HomePage = () => {
 		}
   }
 
+  const noSearchResult = (_itemList) => {
+    if(_itemList.length === 0){
+      setNo(true);
+      setPageFlag(false);
+    }
+    else{
+      setNo(false);
+      setPageFlag(true);
+    }
+  }
   const searchButton = async() => {
     const zoomLevel = mapIns.getZoom();
     const coordinateX = mapIns.getCenter().lat;
     const coordinateY = mapIns.getCenter().lng;
     const numberOfResult = setSearchRange(zoomLevel);
     const loadedShopList = await getStoreInfoP(pageNum, numberOfResult, coordinateX, coordinateY);
+    setItems(loadedShopList);
+    setPage(1);
     setStoreLocation(loadedShopList, numberOfResult);
     setResultView(loadedShopList, pageNum);
-    setPageFlag(true);
+    noSearchResult(loadedShopList);
   }
   const testbtn = () => {
     // setResultView();
@@ -109,8 +158,17 @@ export const HomePage = () => {
   return(
     <section className="Align-center">
       <button onClick={testbtn}>test</button>
-      <MapView setMapIns={getMapIns} storeLocations={storeXY} />
+      <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} storeLocations={storeXY} />
+      {rangeIndicatior}<br/>
       <button onClick={searchButton}>地図から探す</button><br/>
+      {noResult ? (<p>
+        検索結果がありません<br/>位置を変更してやり直してください。
+      </p>):null}
+      {pFlag ? (<>
+        <a onClick={()=>prevPage(pageNum)} style={{cursor: "pointer"}} >prev ←</a>
+        {' '+(pageNum)+' / ' + (wholePage) + ' '}
+        <a onClick={()=>nextPage(pageNum)} style={{cursor: "pointer"}} >→ next</a>
+      </>):null}
       {viewList.map((searchItems, index) => (
         <ItemListCpnt
           key={index}

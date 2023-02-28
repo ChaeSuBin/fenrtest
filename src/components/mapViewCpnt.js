@@ -1,7 +1,7 @@
 import React, { useState }from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } from 'react-leaflet';
 
-export const MapView = ({ setMapIns, storeLocations }) => {
+export const MapView = ({ setMapIns, setMapLevel, storeLocations }) => {
   const [position, setXY] = useState([35.689, 139.692]);
   const zoom = 17;
 
@@ -18,6 +18,7 @@ export const MapView = ({ setMapIns, storeLocations }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ChangeZoomLevel levelSetter={setMapLevel}/>
 			{storeLocations.map((marker, idx) => (
 				<Marker key={idx} position={marker.coordinates}>
 					<Popup>
@@ -29,11 +30,12 @@ export const MapView = ({ setMapIns, storeLocations }) => {
   </>
   )
 }
-const SetMarker = ({setBound}) => {
-  const mapInstance = useMap();
-  const mapBound = mapInstance.getBounds();
-  setBound(mapBound);
-  console.log(mapBound);
+const ChangeZoomLevel = ({ levelSetter }) => {
+  const map = useMapEvent({
+    zoomend: () => {
+      levelSetter(map.getZoom());
+    }
+  })
 }
 const ChangeMapCenter = ({ position }) => {
   const map = useMap();
