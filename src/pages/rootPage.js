@@ -20,7 +20,7 @@ export const HomePage = () => {
   useEffect(() => {
     let searchRange;
     try{
-      searchRange = setSearchRange(zoomap);
+      searchRange = setSearchRange(zoomap)[0];
     }
     catch(err){
       searchRange = 20;
@@ -99,10 +99,15 @@ export const HomePage = () => {
   }
 
   const nextPage = (_page) => {
+    let pageNum = _page+1;
+    console.log(pageNum);
     if(_page < wholePage){
-      const pageNum = _page+1;
       setPage(pageNum);
       setResultView(searchedItems, pageNum);
+    }
+    else{
+      setPage(pageNum);
+      searchButton(pageNum);
     }
   }
   const prevPage = (_page) => {
@@ -114,21 +119,23 @@ export const HomePage = () => {
   }
 
   //set search Range base on zoom level on map
+  //return api params [count, range]
   const setSearchRange = (_zoom) => {
     switch(_zoom){
       case 15:
-        return 100;
+        return [100, 5];
 			case 16:
-				return 50;
+				return [50, 4];
 			case 17:
-				return 20;
+				return [20, 2];
 			case 18:
-				return 10;
+				return [10, 1];
 			default:
-				return 100;
+				return [100, 5];
 		}
   }
 
+  // If there's nothing to render on the screen
   const noSearchResult = (_itemList) => {
     if(_itemList.length === 0){
       setNo(true);
@@ -139,6 +146,7 @@ export const HomePage = () => {
       setPageFlag(true);
     }
   }
+  
   const searchButton = async() => {
     const zoomLevel = mapIns.getZoom();
     const coordinateX = mapIns.getCenter().lat;
@@ -147,7 +155,7 @@ export const HomePage = () => {
     const loadedShopList = await getStoreInfoP(pageNum, numberOfResult, coordinateX, coordinateY);
     setItems(loadedShopList);
     setPage(1);
-    setStoreLocation(loadedShopList, numberOfResult);
+    setStoreLocation(loadedShopList, numberOfResult[0]);
     setResultView(loadedShopList, pageNum);
     noSearchResult(loadedShopList);
   }
