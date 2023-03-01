@@ -7,14 +7,19 @@ export const HomePage = () => {
   const [zoomap, getZoomLevel] = useState(17);
   const [mapIns, getMapIns] = useState(null);
   const [rangeIndicatior, setRangeIndi] = useState(null);
-  const [mapCenter, setCenter] = useState({positionX: null,positionY: null});
+  const [myLocation, setLocation] = useState({lat: 0, lng: 0});
+  const [SC, setSC] = useState(null); //search Condition
   const [searchedItems, setItems] = useState([]);
   const [viewList, setViewList] = useState([]);
   const [storeXY, setPosition] = useState([{name: "", coordinates: [0,0]}]);
   const [pageNum, setPage] = useState(1);
+  const [searchPageNum, setSearchPage] = useState(3);
   const [wholePage, setWpage] = useState(1);
   const [pFlag, setPageFlag] = useState(false);
+  const [sFlag, setSearchFlag] = useState(false);
   const [noResult, setNo] = useState(false);
+  const [gpsFlag, setGpsFlag] = useState(false);
+
 
   //auto detect a mapScailing and display searchRange based od zoom level
   useEffect(() => {
@@ -41,7 +46,12 @@ export const HomePage = () => {
     }
   },[zoomap])
 
+  // useEffect(() => {
+  //   console.log(mapCenter);
+  // },[mapCenter])
+  
   //get store info using server api
+  //return Promise (get グルメサーチAPI result)
   const getStoreInfoP = async(_pageNum, _searchCount, _lat, _lng) => {
     const searchFrom = ((_pageNum-1)*10)+1;
     return new Promise(resolve => {
@@ -73,10 +83,9 @@ export const HomePage = () => {
     setPosition(storeLocateBatch);
     setWpage(Math.ceil(_shopList.length / 10));
   }
-  
+
   //create 10 tuple of store list for Render
   const setResultView = (_shopList, _pageNum) => {
-    console.log(_pageNum);
     let iterINT = (_pageNum - 1) * 10;
     let storeViewList = [];
 
@@ -104,10 +113,6 @@ export const HomePage = () => {
     if(_page < wholePage){
       setPage(pageNum);
       setResultView(searchedItems, pageNum);
-    }
-    else{
-      setPage(pageNum);
-      searchButton(pageNum);
     }
   }
   const prevPage = (_page) => {
@@ -147,28 +152,54 @@ export const HomePage = () => {
     }
   }
   
-  const searchButton = async() => {
+  //get search params from map state
+  const getSearchCondition = () => {
     const zoomLevel = mapIns.getZoom();
     const coordinateX = mapIns.getCenter().lat;
     const coordinateY = mapIns.getCenter().lng;
     const numberOfResult = setSearchRange(zoomLevel);
-    const loadedShopList = await getStoreInfoP(pageNum, numberOfResult, coordinateX, coordinateY);
-    setItems(loadedShopList);
+    return [coordinateX, coordinateY, numberOfResult];
+  }
+  const renderParamsSet = (_shopList) => {
+    setItems(_shopList);
     setPage(1);
-    setStoreLocation(loadedShopList, numberOfResult[0]);
-    setResultView(loadedShopList, pageNum);
-    noSearchResult(loadedShopList);
+    setResultView(_shopList, 1);
+    noSearchResult(_shopList);
+    setGpsFlag(false);
+  }
+
+  const searchButton = async(_research) => {
+    const SC = getSearchCondition();
+    const loadedShopList = await getStoreInfoP(1, SC[2], SC[0], SC[1]);
+    setSearchPage(3);
+    setStoreLocation(loadedShopList, SC[2][0]);
+    renderParamsSet(loadedShopList);
+    setSC(SC);
+    setSearchFlag(true);
+  }
+  const searchButton2 = async() => {
+    const loadedShopList = await getStoreInfoP(searchPageNum, SC[2], SC[0], SC[1]);
+    setSearchPage(searchPageNum + 2);
+    setStoreLocation(loadedShopList, SC[2][0]);
+    renderParamsSet(loadedShopList);
   }
   const testbtn = () => {
-    // setResultView();
+    navigator.geolocation.getCurrentPosition(position => {
+      const {latitude, longitude} = position.coords;
+      setLocation([latitude, longitude]);
+      setGpsFlag(true);
+    })
   }
 
   return(
     <section className="Align-center">
       <button onClick={testbtn}>test</button>
-      <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} storeLocations={storeXY} />
+      <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
       {rangeIndicatior}<br/>
       <button onClick={searchButton}>地図から探す</button><br/>
+      {sFlag ? (<>
+        <button onClick={searchButton2}>さらに検索</button><br/>
+      </>):null}
       {noResult ? (<p>
         検索結果がありません<br/>位置を変更してやり直してください。
       </p>):null}
