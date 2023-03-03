@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './btn001.css';
 import { getStoreList } from "../api";
 import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
@@ -86,6 +87,7 @@ export const HomePage = () => {
 
   //create 10 tuple of store list for Render
   const setResultView = (_shopList, _pageNum) => {
+    console.log(_shopList);
     let iterINT = (_pageNum - 1) * 10;
     let storeViewList = [];
 
@@ -95,7 +97,9 @@ export const HomePage = () => {
           name: _shopList[iterINT].name,
           desc: _shopList[iterINT].catch,
           addr: _shopList[iterINT].address,
+          access: _shopList[iterINT].access,
           photo: _shopList[iterINT].photo.pc.m,
+          storeId: _shopList[iterINT].id
         }
         storeViewList.push(searchItem);
         ++iterINT;
@@ -183,7 +187,7 @@ export const HomePage = () => {
     setStoreLocation(loadedShopList, SC[2][0]);
     renderParamsSet(loadedShopList);
   }
-  const testbtn = () => {
+  const moveMylocation = () => {
     navigator.geolocation.getCurrentPosition(position => {
       const {latitude, longitude} = position.coords;
       setLocation([latitude, longitude]);
@@ -193,12 +197,15 @@ export const HomePage = () => {
 
   return(
     <section className="Align-center">
-      <button onClick={testbtn}>test</button>
+      <button onClick={moveMylocation} className="Btn-search">現在地に移動</button>
       <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
-      {rangeIndicatior}<br/>
-      <button onClick={searchButton}>地図から探す</button><br/>
+      {rangeIndicatior}
+      <button onClick={searchButton} className="Btn-search">地図から探す</button>
       {sFlag ? (<>
-        <button onClick={searchButton2}>さらに検索</button><br/>
+        <section onClick={searchButton2} className="Btn-search-sub">
+          <p>最後の検索地点から探す</p>
+          <span>さらに検索</span>
+        </section><br/>
       </>):null}
       {noResult ? (<p>
         検索結果がありません<br/>位置を変更してやり直してください。
@@ -213,8 +220,9 @@ export const HomePage = () => {
           key={index}
           name={searchItems.name}
           desc={searchItems.desc}
-          addr={searchItems.addr}
+          addr={searchItems.access}
           photo={searchItems.photo}
+          id={searchItems.storeId}
         />
       ))}
       {pFlag ? (<>

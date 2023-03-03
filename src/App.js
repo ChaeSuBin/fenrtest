@@ -6,6 +6,7 @@ import {
   Route,
 } from "react-router-dom";
 import { HomePage } from './pages/rootPage';
+import { StoreInfo } from './pages/itemPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Router>
           <Routes>
             <Route exact path='/' element={<HomePage />}/>
+            <Route exact path='/storeinfo/:storeid' element={<StoreInfo />}/>
           </Routes>
         </Router>
       </header>

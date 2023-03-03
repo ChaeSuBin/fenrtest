@@ -11,3 +11,6 @@ async function request(path, options = {}) {
 export async function getStoreList(_searchFrom, _searchCount, _lat, _lng){
     return request(`&lat=${_lat}&lng=${_lng}&range=${_searchCount[1]}&order=1&start=${_searchFrom}&count=${_searchCount[0]}`);
 }
+export async function getStoreInfo(_storeId){
+    return request(`&id=${_storeId}`);
+}
