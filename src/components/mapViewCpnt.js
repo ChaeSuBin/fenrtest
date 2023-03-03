@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } from 'react-leaflet';
 
+export const MapViewOneStore = ({ location, storeName }) => {
+
+  return(<>
+    {location.lat === 0 ? (<p>
+      loading...
+    </p>):<MapContainer center={location} zoom={17} scrollWheelZoom={false}>
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={location}>
+        <Popup>
+          {storeName}
+        </Popup>
+      </Marker>
+    </MapContainer>}
+  </>)
+}
+
 export const MapView = ({ setMapIns, setMapLevel, myLocation, activeFlag, setFlag, storeLocations }) => {
   const [position, setXY] = useState([35.689, 139.692]);
   const zoom = 17;

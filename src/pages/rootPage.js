@@ -22,7 +22,7 @@ export const HomePage = () => {
   const [gpsFlag, setGpsFlag] = useState(false);
 
 
-  //auto detect a mapScailing and display searchRange based od zoom level
+  //auto detect a mapZoomLevel and display searchRange based od zoom level
   useEffect(() => {
     let searchRange;
     try{
@@ -46,12 +46,8 @@ export const HomePage = () => {
         setRangeIndi('検索半径：区');
     }
   },[zoomap])
-
-  // useEffect(() => {
-  //   console.log(mapCenter);
-  // },[mapCenter])
   
-  //get store info using server api
+  //get store info from server api
   //return Promise (get グルメサーチAPI result)
   const getStoreInfoP = async(_pageNum, _searchCount, _lat, _lng) => {
     const searchFrom = ((_pageNum-1)*10)+1;
@@ -98,7 +94,7 @@ export const HomePage = () => {
           desc: _shopList[iterINT].catch,
           addr: _shopList[iterINT].address,
           access: _shopList[iterINT].access,
-          photo: _shopList[iterINT].photo.pc.m,
+          photo: _shopList[iterINT].photo.pc.s,
           storeId: _shopList[iterINT].id
         }
         storeViewList.push(searchItem);
@@ -164,6 +160,8 @@ export const HomePage = () => {
     const numberOfResult = setSearchRange(zoomLevel);
     return [coordinateX, coordinateY, numberOfResult];
   }
+
+  //set on hook's parameters for rendering
   const renderParamsSet = (_shopList) => {
     setItems(_shopList);
     setPage(1);
@@ -203,7 +201,7 @@ export const HomePage = () => {
       <button onClick={searchButton} className="Btn-search">地図から探す</button>
       {sFlag ? (<>
         <section onClick={searchButton2} className="Btn-search-sub">
-          <p>最後の検索地点から探す</p>
+          <p>最後の検索地点から</p>
           <span>さらに検索</span>
         </section><br/>
       </>):null}
