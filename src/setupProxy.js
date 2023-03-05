@@ -4,14 +4,14 @@ module.exports = function (app) {
   app.use(
     "/gourmet",
     createProxyMiddleware({
-      target: "http://webservice.recruit.co.jp/hotpepper",
+      target: "https://webservice.recruit.co.jp/hotpepper",
       changeOrigin: true,
     })
   );
   app.use(
     "/v1",
     createProxyMiddleware({
-      target: "http://webservice.recruit.co.jp/hotpepper",
+      target: "https://webservice.recruit.co.jp/hotpepper",
       changeOrigin: true,
     })
   );
