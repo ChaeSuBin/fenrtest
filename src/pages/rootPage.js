@@ -174,7 +174,6 @@ export const HomePage = () => {
   const searchButton = async(_research) => {
     const SC = getSearchCondition();
     const loadedShopList = await getStoreInfoP(1, SC[2], SC[0], SC[1]);
-    console.log(loadedShopList);
     setSearchPage(3);
     setStoreLocation(loadedShopList, SC[2][0]);
     renderParamsSet(loadedShopList);

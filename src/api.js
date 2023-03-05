@@ -1,6 +1,6 @@
 async function request(path, options = {}) {
     const secret = process.env.REACT_APP_HOTPEPPER_API_KEY;
-    const url = `/gourmet/v1/?key=${secret}&format=json${path}`;
+    const url = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${secret}&format=json${path}`;
     const response = await fetch(url, options);
     return response.json();
 }
