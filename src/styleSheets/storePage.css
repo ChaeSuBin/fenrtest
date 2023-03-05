@@ -1,0 +1,20 @@
+/* item page css */
+.store-page {
+    background-color: #050e1f;
+  }
+  
+  .store-page p {
+    margin: auto;
+    color: darkgray;
+  }
+    
+  @media (max-width: 700px){
+    .store-page p {
+        font-size: small;
+    }
+  }
+  @media (min-width: 701px) {
+    .store-page p {
+        font-size: large;
+    }
+  }

@@ -1,10 +1,11 @@
-/* button001 css */
+/* buttons css */
 .Btn-search {
+    vertical-align: inherit;
     font-size: initial;
     background: #37b5db;
     border-radius: 3px;
     position: relative;
-    display: flex;
+    display: inline-flex;
     justify-content: space-around;
     align-items: center;
     margin: 0 auto;
@@ -69,4 +70,43 @@
 .Btn-search-sub span:hover {
     transform: translateY(-2px);
     box-shadow: 0 15px 30px -5px rgb(0 0 0 / 15%), 0 0 5px rgb(0 0 0 / 10%);
+}
+
+.Btn-mylocation {
+    display: inline-flex;
+    vertical-align: middle;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px 11px;
+    margin: 0 auto;
+    cursor:pointer;
+}
+.Btn-mylocation .outerCircle {
+    background-color: red;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 50%;
+}
+.Btn-mylocation .innerCircle {
+    background-color: #FFF;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    border-radius: 50%;
+    color: red;
+    font-size: 13px;
+}
+.Btn-mylocation .horiLine {
+    border-bottom: 2px solid red;
+    position: absolute;
+    width: 30px;
+}
+.Btn-mylocation .vertLine {
+    border-bottom: 2px solid red;
+    position: absolute;
+    width: 28px;
+    transform: rotate(90deg);
 }

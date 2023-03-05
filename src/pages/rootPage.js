@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import './btn001.css';
+import '../styleSheets/btnStyles.css';
 import { getStoreList } from "../api";
 import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
 
 export const HomePage = () => {
-  const [zoomap, getZoomLevel] = useState(17);
+  const [zoomap, getZoomLevel] = useState(16);
   const [mapIns, getMapIns] = useState(null);
   const [rangeIndicatior, setRangeIndi] = useState(null);
   const [myLocation, setLocation] = useState({lat: 0, lng: 0});
@@ -127,12 +127,13 @@ export const HomePage = () => {
   //return api params [count, range]
   const setSearchRange = (_zoom) => {
     switch(_zoom){
-      case 15:
+      case 14:
         return [100, 5];
-			case 16:
+			case 15:
 				return [50, 4];
-			case 17:
+			case 16:
 				return [20, 2];
+      case 17:
 			case 18:
 				return [10, 1];
 			default:
@@ -195,14 +196,21 @@ export const HomePage = () => {
 
   return(
     <section className="Align-center">
-      <button onClick={moveMylocation} className="Btn-search">現在地に移動</button>
-      <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
-      {rangeIndicatior}
+      <div>
+      <button onClick={moveMylocation} className="Btn-mylocation">
+        <span className="outerCircle"></span>
+        <span className="horiLine"></span>
+        <span className="vertLine"></span>
+        <span className="innerCircle">?</span>
+      </button>
       <button onClick={searchButton} className="Btn-search">地図から探す</button>
+      </div>
+      {rangeIndicatior}
+      <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
       {sFlag ? (<>
-        <section onClick={searchButton2} className="Btn-search-sub">
+        <section className="Btn-search-sub">
           <p>最後の検索地点から</p>
-          <span>さらに検索</span>
+          <span onClick={searchButton2}>さらに検索</span>
         </section><br/>
       </>):null}
       {noResult ? (<p>

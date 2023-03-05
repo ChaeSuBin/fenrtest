@@ -1,5 +1,5 @@
 import React from 'react';
-import './card.css';
+import '../styleSheets/card.css';
 import { Link } from "react-router-dom";
 
 export const ItemListCpnt = ({name, desc, addr, photo, id}) => {

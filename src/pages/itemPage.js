@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styleSheets/storePage.css';
 import { useParams } from 'react-router-dom';
 import { getStoreInfo } from '../api';
 import { UseWindowSize } from '../components/layoutDetectorCpnt'
@@ -52,15 +53,12 @@ export const StoreInfo = () => {
 		console.log(mobile);
 	}
 
-	return(<>
-		{/* <button onClick={testbtn}>test</button> */}
-		店名<br/>{storeInfo.name} <br/>
+	return(<section className="store-page">
+		<p>店名</p>{storeInfo.name} <br/>
 		<img src={storeInfo.photo} /><br/>
-		位置<br/>{storeInfo.addr}<br/>
+		<p>位置</p>{storeInfo.addr}<br/>
 		<MapViewOneStore location={storeInfo.location} storeName={storeInfo.name} />
-		<section>
-			営業時間<br/>{storeInfo.open} <br/>
-			店休日<br/>{storeInfo.close}
-		</section>
-	</>)
+		<p>営業時間</p>{storeInfo.open} <br/>
+		<p>店休日</p>{storeInfo.close}
+	</section>)
 }

@@ -6,7 +6,7 @@ export const MapViewOneStore = ({ location, storeName }) => {
   return(<>
     {location.lat === 0 ? (<p>
       loading...
-    </p>):<MapContainer center={location} zoom={17} scrollWheelZoom={false}>
+    </p>):<MapContainer center={location} zoom={16} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -22,7 +22,7 @@ export const MapViewOneStore = ({ location, storeName }) => {
 
 export const MapView = ({ setMapIns, setMapLevel, myLocation, activeFlag, setFlag, storeLocations }) => {
   const [position, setXY] = useState([35.689, 139.692]);
-  const zoom = 17;
+  const zoom = 16;
 
   return (
   <>

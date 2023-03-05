@@ -32,6 +32,11 @@
     bottom:0;
     background-color: rgb(211, 104, 104);
   }
+  .leaflet-container {
+    width: auto;
+    height: 330px;
+    margin: 10px;
+  }
   .App-header {
     padding-bottom: 10%
   }
@@ -44,22 +49,13 @@
     bottom:0;
     background-color: #ddb5b5;
   }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  .leaflet-container {
+    width: 640px;
+    height: 400px;
+    margin: auto;
   }
 }
 
 .Align-center {
   text-align: center;
-}
-.leaflet-container {
-  width: auto;
-  height: 400px;
-  margin: 10px;
 }
