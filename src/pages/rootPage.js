@@ -182,7 +182,7 @@ export const HomePage = () => {
     setGpsFlag(false);
   }
 
-  const searchButton = async(_research) => {
+  const searchButton = async() => {
     const SC = getSearchCondition();
     const loadedShopList = await getStoreInfoP(1, SC[2], SC[0], SC[1]);
     setSearchPage(3);
