@@ -27,7 +27,7 @@ function App() {
           </Routes>
         </Router>
       </header>
-      <footer>version</footer>
+      <footer>v03062246test</footer>
     </div>
   );
 }

@@ -49,10 +49,6 @@ export const StoreInfo = () => {
     })
   }
 
-	const testbtn = async() => {
-		console.log(mobile);
-	}
-
 	return(<section className="store-page">
 		<p>店名</p>{storeInfo.name} <br/>
 		<img src={storeInfo.photo} /><br/>

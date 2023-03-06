@@ -3,8 +3,10 @@ import '../styleSheets/btnStyles.css';
 import { getStoreList } from "../api";
 import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
+import { UseWindowSize } from "../components/layoutDetectorCpnt";
 
 export const HomePage = () => {
+  const mobile = UseWindowSize();
   const [zoomap, getZoomLevel] = useState(16);
   const [mapIns, getMapIns] = useState(null);
   const [rangeIndicatior, setRangeIndi] = useState(null);
@@ -93,10 +95,18 @@ export const HomePage = () => {
           name: _shopList[iterINT].name,
           desc: _shopList[iterINT].catch,
           addr: _shopList[iterINT].address,
-          access: _shopList[iterINT].access,
-          photo: _shopList[iterINT].photo.pc.s,
+          access: null,
+          photo: _shopList[iterINT].logo_image,
           storeId: _shopList[iterINT].id
         }
+        if(mobile)
+          searchItem.access = _shopList[iterINT].mobile_access;
+        else
+          searchItem.access = _shopList[iterINT].access;
+        
+        if(searchItem.photo == 'https://imgfp.hotp.jp/SYS/cmn/images/common/diary/custom/m30_img_noimage.gif')
+          searchItem.photo = _shopList[iterINT].photo.pc.s;
+
         storeViewList.push(searchItem);
         ++iterINT;
       }
