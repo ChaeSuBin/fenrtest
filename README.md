@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# ワンクリックで探せる！周りのお店検索
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+本プロジェクトは [周りのお店](https://millrnft.com)で試すことができます。
+ドメインは以前のプロジェクトで使用したものをそのまま使用しておりますので、ご了承ください。
 
 ## Available Scripts
 
