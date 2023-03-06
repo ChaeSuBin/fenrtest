@@ -77,7 +77,7 @@ export const HomePage = () => {
       }
     }
     catch(err){
-      console.log('not allowed Reference');
+      console.log('catch: not allowed Ref');
     }
     setPosition(storeLocateBatch);
     setWpage(Math.ceil(_shopList.length / 10));
@@ -106,13 +106,14 @@ export const HomePage = () => {
         
         if(searchItem.photo == 'https://imgfp.hotp.jp/SYS/cmn/images/common/diary/custom/m30_img_noimage.gif')
           searchItem.photo = _shopList[iterINT].photo.pc.s;
-
+        if(searchItem.desc == '')
+          searchItem.desc = '説明なし';
         storeViewList.push(searchItem);
         ++iterINT;
       }
     }
     catch(err){
-      console.log(err);
+      console.log('catch: not allowed Ref');
     }
     setViewList(storeViewList);
   }
@@ -190,6 +191,7 @@ export const HomePage = () => {
     setSC(SC);
     setSearchFlag(true);
   }
+  //sarani kensaku button
   const searchButton2 = async() => {
     const loadedShopList = await getStoreInfoP(searchPageNum, SC[2], SC[0], SC[1]);
     setSearchPage(searchPageNum + 2);
@@ -217,15 +219,15 @@ export const HomePage = () => {
       </div>
       {rangeIndicatior}
       <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
-      {sFlag ? (<>
+      {}
+      {noResult ? (<p>
+        検索結果がありません<br/>位置を変更してやり直してください。
+      </p>):sFlag ? (<>
         <section className="Btn-search-sub">
           <p>最後の検索地点から</p>
           <span onClick={searchButton2}>さらに検索</span>
         </section><br/>
       </>):null}
-      {noResult ? (<p>
-        検索結果がありません<br/>位置を変更してやり直してください。
-      </p>):null}
       {pFlag ? (<>
         <a onClick={()=>prevPage(pageNum)} style={{cursor: "pointer"}} >prev ←</a>
         {' '+(pageNum)+' / ' + (wholePage) + ' '}
