@@ -14,7 +14,7 @@
     color: #FFF;
     cursor: pointer;
     transition: 0.3s ease-in-out;
-    font-weight: 500;
+    font-weight: bold;
 }
 .Btn-search:hover {
     background: #FFF;
@@ -27,7 +27,7 @@
 }
 .Btn-search-sub p {
     margin-bottom: 5px;
-    font-weight: 600;
+    font-weight: bold;
     color: #6bb6ff;
     letter-spacing: 0.04rem;
     display: inline-block;
@@ -61,7 +61,7 @@
     margin: 0 auto;
     max-width: 190px;
     padding: 10px 25px;
-    font-weight: 600;
+    font-weight: bold;
     background: #6bb6ff;
     border-radius: 3px;
     cursor: pointer;
@@ -97,6 +97,7 @@
     border-radius: 50%;
     color: red;
     font-size: 13px;
+    font-weight: bold;
 }
 .Btn-mylocation .horiLine {
     border-bottom: 2px solid red;
@@ -108,4 +109,19 @@
     position: absolute;
     width: 28px;
     transform: rotate(90deg);
+}
+.leaflet-zoom-btn {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+    font-size: 22px;
+    border: inset;
+    background: white;
+    color: black;
+}
+.Btn-search-sub .help-search-sub{
+    cursor: default;
+    width: 130px;
+    height: 38px;
+    padding: inherit;
+    margin: inherit;
 }

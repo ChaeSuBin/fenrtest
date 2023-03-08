@@ -1,4 +1,5 @@
 .App {
+  font-weight: bold;
   background-color: #050e1f;
 }
 
@@ -40,6 +41,10 @@
   .App-header {
     padding-bottom: 10%
   }
+  .Help-section {
+    margin-left: 1em;
+    text-align: left;
+  }
 }
 @media (min-width: 701px) {
   footer {
@@ -54,8 +59,17 @@
     height: 400px;
     margin: auto;
   }
+  .Help-section {
+    margin-left: 3em;
+    text-align: left;
+  }
 }
 
 .Align-center {
   text-align: center;
+}
+
+.Help-section p {
+  margin-bottom: 5px;
+  margin-top: 0px;
 }

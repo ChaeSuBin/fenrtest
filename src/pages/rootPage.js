@@ -4,6 +4,7 @@ import { getStoreList } from "../api";
 import { ItemListCpnt } from "../components/itemListCpnt";
 import { MapView } from "../components/mapViewCpnt";
 import { UseWindowSize } from "../components/layoutDetectorCpnt";
+import { HelpCpnt } from "../components/helpCpnt";
 
 export const HomePage = () => {
   const mobile = UseWindowSize();
@@ -36,16 +37,16 @@ export const HomePage = () => {
 
     switch(searchRange){
       case 10:
-        setRangeIndi('検索半径：回り');
+        setRangeIndi('検索半径：300m');
         break;
       case 20:
-        setRangeIndi('検索半径：通り');
+        setRangeIndi('検索半径：500m');
         break;
       case 50:
-        setRangeIndi('検索半径：町');
+        setRangeIndi('検索半径：1km');
         break;
       default:
-        setRangeIndi('検索半径：区');
+        setRangeIndi('検索半径：3km');
     }
   },[zoomap])
   
@@ -182,6 +183,9 @@ export const HomePage = () => {
     setGpsFlag(false);
   }
 
+  const scollDown = () => {
+    window.scrollTo(0, 180);
+  }
   const searchButton = async() => {
     const SC = getSearchCondition();
     const loadedShopList = await getStoreInfoP(1, SC[2], SC[0], SC[1]);
@@ -190,6 +194,7 @@ export const HomePage = () => {
     renderParamsSet(loadedShopList);
     setSC(SC);
     setSearchFlag(true);
+    setTimeout(scollDown, 400);
   }
   //sarani kensaku button
   const searchButton2 = async() => {
@@ -217,17 +222,17 @@ export const HomePage = () => {
       </button>
       <button onClick={searchButton} className="Btn-search">地図から探す</button>
       </div>
-      {rangeIndicatior}
+      <span>{rangeIndicatior}</span>
       <MapView setMapIns={getMapIns} setMapLevel={getZoomLevel} myLocation={myLocation} activeFlag={gpsFlag} setFlag={setGpsFlag} storeLocations={storeXY} />
       {}
       {noResult ? (<p>
         検索結果がありません<br/>位置を変更してやり直してください。
-      </p>):sFlag ? (<>
-        <section className="Btn-search-sub">
-          <p>最後の検索地点から</p>
-          <span onClick={searchButton2}>さらに検索</span>
-        </section><br/>
-      </>):null}
+        </p>):sFlag ? (<>
+          <section className="Btn-search-sub">
+            <p>最後の検索地点から</p>
+            <span onClick={searchButton2}>さらに検索</span>
+          </section><br/>
+        </>):<HelpCpnt />}
       {pFlag ? (<>
         <a onClick={()=>prevPage(pageNum)} style={{cursor: "pointer"}} >prev ←</a>
         {' '+(pageNum)+' / ' + (wholePage) + ' '}
