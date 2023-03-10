@@ -125,3 +125,8 @@
     padding: inherit;
     margin: inherit;
 }
+
+.Btn-help {
+    height: 36px;
+    cursor: help;
+}
